@@ -1,0 +1,1 @@
+pegjs --format umd --export-var CtxParser parser.pegjs
