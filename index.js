@@ -13,9 +13,9 @@ var CtxParse = {
 	item(item, derivatives) {
 		var tokens = CtxParser.parse(item),
 				length = tokens.length,
-				verb = getVerb(tokens[0]),
-				id = getId(tokens[length - 1]),
-				parsed = {item, verb, id, tokens};
+				verb = length ? getVerb(tokens[0]) : null,
+				id = length ? getId(tokens[length - 1]) : null,
+				parsed = {item, verb, id, tokens, removed: !length};
 
 		if(id) tokens.pop();
 		if(verb) tokens.shift();
@@ -30,7 +30,8 @@ var CtxParse = {
 		}
 		
 		function getId(token) {
-			return token.body.match(/^~\d{3,}$/) ? token.body : null;
+			var match = token.body.match(/^~(\d{3,})$/);
+			return match ? match[1] : null;
 		}
 	},
 	
