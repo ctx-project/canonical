@@ -15,15 +15,15 @@ var CtxParse = {
 				length = tokens.length,
 				verb = length ? getVerb(tokens[0]) : null,
 				id = length ? getId(tokens[length - 1]) : null,
-				parsed = {item, verb, id, tokens, removed: !length};
+				record = {item, verb, id, tokens, removed: !length};
 
 		if(id) tokens.pop();
 		if(verb) tokens.shift();
 		
 		if(derivatives)
-			derivatives.forEach(d => CtxParse[d](parsed));
+			derivatives.forEach(d => CtxParse[d](record));
 
-		return parsed;
+		return record;
 		
 		function getVerb(token) {
 			return ['!', '!!', '?', '??', '$', '$$'].indexOf(token.body) != -1 ? token.body : null;
@@ -35,43 +35,43 @@ var CtxParse = {
 		}
 	},
 	
-	tags(parsed) {
-		parsed.tags = parsed.tokens.filter(t => t.type == 'tag');
+	tags(record) {
+		record.tags = record.tokens.filter(t => t.type == 'tag');
 	},
-	signature(parsed) {
+	signature(record) {
 		var sig = [];
 		
-		parsed.tags.forEach(t => {
+		record.tags.forEach(t => {
 			sig.push(t.name.toLowerCase());
 			if(t.parts.length > 1)
 				sig = sig.concat(t.parts.filter(p => isNaN(+p)).map(p => p.toLowerCase()));
 		});
 		
-		parsed.signature = sig;
+		record.signature = sig;
 	},
-	meta(parsed) {
+	meta(record) {
 		var meta = {};
 		
-		parsed.tags.forEach(t => {
+		record.tags.forEach(t => {
 			if(t.name[0] == '*') meta[t.name.toLowerCase()] = t.value || true;
 		});
 		
-		parsed.meta = meta;
+		record.meta = meta;
 	},
 	
-	head(parsed) {
-		var ix = parsed.tokens.findIndex(t => t.type == 'word');
-		parsed.head = ix == -1 ? parsed.tokens : parsed.tokens.slice(0, ix);
+	head(record) {
+		var ix = record.tokens.findIndex(t => t.type == 'word');
+		record.head = ix == -1 ? record.tokens : record.tokens.slice(0, ix);
 	},
-	split(parsed) {
-		var head = parsed.head,
+	split(record) {
+		var head = record.head,
 				length = head.length;
-		parsed.split = length ? head[length - 1].end : 0;
+		record.split = length ? head[length - 1].end : 0;
 		//?dc exista verb ?
 	},
 	
-	query(parsed) {
-		parsed.query = parsed.tokens.filter(t => t.body[0] != '*').map(t => t.body).join(' ');
+	query(record) {
+		record.query = record.tokens.filter(t => t.body[0] != '*').map(t => t.body).join(' ');
 	},
 	
 }
