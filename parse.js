@@ -17,7 +17,7 @@ var CtxParse = {
 				length = tokens.length,
 				verb = length ? getVerb(tokens[0]) : null,
 				id = length ? getId(tokens[length - 1]) : null,
-				record = {item, verb, id, tokens, removed: !length};
+				record = {item, verb, id, tokens, removed: id && length == 1};
 
 		if(id) tokens.pop();
 		if(verb) tokens.shift();
@@ -51,10 +51,14 @@ var CtxParse = {
 		var sig = [];
 		
 		record.tags.forEach(t => {
-			sig.push(t.name.toLowerCase());
-			if(t.parts.length > 1)
+			if(t.parts.length == 1)
+				sig.push(t.name.toLowerCase());
+			else	
 				sig = sig.concat(t.parts.filter(p => isNaN(+p)).map(p => p.toLowerCase()));
 		});
+		
+		//? maybe in parser
+		if(record.tokens.find(t => t.body == '|')) sig.push('|');
 		
 		record.signature = sig;
 	},

@@ -6,6 +6,7 @@ tag		= sign:[-+]? name:$((([A-Z] part) / ('*' part) / ('#' part)) ('.' part)*) v
 			{
 					if(name[0] == '#') name = name.slice(1);
 					var loc = location(), parts = name.split('.');
+					if(parts.length > 1) parts.unshift(name);
 					return {type: 'tag', body: text(), start: loc.start.offset, end: loc.end.offset,
 									sign, name, parts, value: value ? value[1] : null }
 			}
