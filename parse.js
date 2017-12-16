@@ -84,7 +84,7 @@ var CtxParse = {
 	},
 	
 	query(record) {
-		record.query = record.tokens.filter(t => t.body[0] != '*').map(t => t.body).join(' ');
+		record.query = record.tokens.filter(t => t.type == 'word').map(t => t.body).join(' ');
 	},
 	
 }
