@@ -28,8 +28,10 @@ var CtxCompose = {
 
 	removeFromHead(record, casedTags) {
 		var split = record.tokens.findIndex(t => t.type != 'tag');
+		split = split == -1 ? record.tokens.length : split;
 		
-		record.tokens = record.tokens.filter((t, ix) => ix >= split || casedTags.indexOf(t.body.toLowerCase()) == -1);
+		if(split)
+			record.tokens = record.tokens.filter((t, ix) => ix >= split || casedTags.indexOf(t.body.toLowerCase()) == -1);
 		
 		return record;
 	},

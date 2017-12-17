@@ -66,7 +66,7 @@ var CtxParse = {
 		var meta = {};
 		
 		record.tags.forEach(t => {
-			if(t.name[0] == '*') meta[t.name.toLowerCase()] = t.value || true;
+			if(t.name[0] == '*') meta[t.name.toLowerCase().slice(1)] = t.value || true;
 		});
 		
 		record.meta = meta;
