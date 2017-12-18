@@ -2,7 +2,7 @@ var l = l || function(o) {console.log(o); return o;};
 		
 var CtxCompose = {
 	_forms: {
-		plainTags: record => record.tokens.map(t => t.body).join(' '),
+		plainTags: (record, format) => record.tokens.map(t => t.body).join(format.separator),
 		markedTags: (record, format) => record.tokens.map(t => t.type == 'tag' ? `${format.tag[0]}${t.body}${format.tag[1]}` : t.body).join(' '),
 		plainId: record => `~${record.id}`,
 		markedId: (record, format) => `${format.id[0]}~${record.id}${format.id[1]}`
@@ -10,6 +10,7 @@ var CtxCompose = {
 	
 	getItemSerializer(format) {
 		format = format || {};
+		format.separator = format.separator || ' ';
 		var forms = [];
 		
 		if(format.tag) forms.push(this._forms.markedTags);
@@ -18,7 +19,7 @@ var CtxCompose = {
 		if(format.id) forms.push(this._forms.markedId);
 		else if(format.id !== false) forms.push(this._forms.plainId);
 		
-		return record => forms.map(f => f(record, format)).join(' ');
+		return record => forms.map(f => f(record, format)).join(format.separator);
 	},
 	
 	getTextSerializer(format, separator) {
@@ -35,6 +36,10 @@ var CtxCompose = {
 		
 		return record;
 	},
+	
+	combineTopicView(topic, view) {
+		return {tokens: topic.tokens.concat(view.words)};
+	}
 }
 
 if(require) {

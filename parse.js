@@ -83,8 +83,11 @@ var CtxParse = {
 		//?dc exista verb ?
 	},
 	
+	words(record) {
+		record.words = record.tokens.filter(t => t.type == 'word');
+	},
 	query(record) {
-		record.query = record.tokens.filter(t => t.type == 'word').map(t => t.body).join(' ');
+		record.query = record.words.map(t => t.body).join(' ');
 	},
 	
 }
