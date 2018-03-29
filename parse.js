@@ -62,15 +62,15 @@ var CtxParse = {
 		
 		record.signature = sig;
 	},
-	meta(record) {
-		var meta = {};
+	// meta(record) {
+	// 	var meta = {};
 		
-		record.tags.forEach(t => {
-			if(t.name[0] == '*') meta[t.name.toLowerCase().slice(1)] = t.value || true;
-		});
+	// 	record.tags.forEach(t => {
+	// 		if(t.name[0] == '*') meta[t.name.toLowerCase().slice(1)] = t.value || true;
+	// 	});
 		
-		record.meta = meta;
-	},
+	// 	record.meta = meta;
+	// },
 	
 	head(record) {
 		var ix = record.tokens.findIndex(t => t.type == 'word');
